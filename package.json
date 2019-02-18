@@ -1,0 +1,20 @@
+{
+  "name": "invite_lambda",
+  "version": "1.0.0",
+  "description": "invite api lambda script",
+  "main": "index.js",
+  "author": "tyabata",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "aws-sdk": "^2.387.0",
+    "crypto-js": "^3.1.9-1",
+    "uuid": "^3.3.2"
+  },
+  "scripts": {
+    "deploy": "npm run zip && npm run upload",
+    "first": "aws lambda create-function --function-name invitees_prod --zip-file fileb://lambda.zip --region us-east-1 --handler src/index.handler --runtime nodejs8.10 --role arn:aws:iam::126382072401:role/service-role/api",
+    "upload": "aws lambda update-function-code --function-name invitees_prod --zip-file fileb://lambda.zip --profile cli --publish",
+    "zip": "zip lambda.zip -r node_modules src"
+  }
+}

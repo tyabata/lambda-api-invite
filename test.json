@@ -1,0 +1,9 @@
+{
+    "uid": "test",
+    "name": "test",
+    "bridegroom": "bride",
+    "address": "asoko",
+    "email": "hoge@gmai.com",
+    "isAllowed": true,
+    "demand": "おにく"
+}
