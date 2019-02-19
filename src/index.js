@@ -7,7 +7,7 @@ exports.handler = (event, context, callback) => {
   try {
     apiHandler(event, context, callback);
   } catch (error) {
-    errorDone(error, error.status || 500, callback);
+    errorDone(error.message || error.stack || 'unknown error.', error.status || 500, callback);
     return;
   }
 };
@@ -38,6 +38,19 @@ function apiHandler(event, context, callback) {
     }
     case 'PUT': {
       if (path === '/invitees') {
+        const data = event.body;
+
+        if (!data.userId) {
+          // ない場合はエラー
+          throw {
+            message: 'request error : 0',
+            status: 400
+          };
+        }
+
+        // uidを復号する
+        const decryptUID = crypt.decryptToId(data.userId);
+
         // データ登録
         dynamo
           .put(event.body)
