@@ -35,7 +35,8 @@ module.exports = {
         (error, data) => {
           if (error) {
             reject({
-              error,
+              message: error.message,
+              trace: error.trace,
               status: 500
             });
           } else {

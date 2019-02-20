@@ -10,8 +10,16 @@ module.exports = {
     const uuid = uuidv1();
     return Crypto.AES.encrypt(uuid, KEY).toString();
   },
-  decryptToId: (text) => {
-    const derypt = Crypto.AES.decrypt(text, KEY);
-    return derypt.toString(CryptoJS.enc.Utf8);
+  decryptToId: text => {
+    try {
+      const derypt = Crypto.AES.decrypt(text, KEY);
+      return derypt.toString(Crypto.enc.Utf8);
+    } catch (error) {
+      console.info(`decrypt : ${error.toString()}`);
+      throw {
+        message: error.message,
+        status: 400
+      };
+    }
   }
 };

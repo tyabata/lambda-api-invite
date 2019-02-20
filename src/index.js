@@ -5,10 +5,10 @@ exports.handler = (event, context, callback) => {
   console.log(event, context);
 
   try {
+    console.info('api handler');
     apiHandler(event, context, callback);
   } catch (error) {
-    errorDone(error.message || error.stack || 'unknown error.', error.status || 500, callback);
-    return;
+    errorDone(error.toString() || 'unknown error.', error.status || 500, callback);
   }
 };
 
@@ -19,10 +19,12 @@ exports.handler = (event, context, callback) => {
  * @param {*} callback 
  */
 function apiHandler(event, context, callback) {
-  const { method, path } = event;
+  const { method, path, body } = event;
 
   switch (method) {
     case 'GET': {
+      console.info('get request');
+
       if (path === '/invitees/user') {
         // userid生成
         const id = crypt.createId();
@@ -37,28 +39,31 @@ function apiHandler(event, context, callback) {
       }
     }
     case 'PUT': {
-      if (path === '/invitees') {
-        const data = event.body;
+      console.info('post request');
 
-        if (!data.userId) {
+      if (path.startsWith('/invitees')) {
+        if (!body || !body.userId) {
           // ない場合はエラー
           throw {
             message: 'request error : 0',
             status: 400
           };
         }
-
+        console.info('decrypt uid');
         // uidを復号する
-        const decryptUID = crypt.decryptToId(data.userId);
+        const decryptUID = crypt.decryptToId(body.userId);
 
         // データ登録
+        console.info('dynamo put');
         dynamo
-          .put(event.body)
-          .then((result) => {
+          .put(decryptUID, body)
+          .then(result => {
+            console.info(`dynamo complete : ${decryptUID}`);
             done(`success!!`, 201, callback);
           })
-          .catch((error) => {
-            errorDone(error, error.status || 500, callback);
+          .catch(error => {
+            console.warn(`dynamo put error ${decryptUID} : ${error.message}`);
+            errorDone(error.message || error.stack || 'unknown put error.', error.status || 500, callback);
           });
         return;
       }
@@ -82,6 +87,6 @@ function done(response, statusCode, callback) {
 function errorDone(error, statusCode, callback) {
   callback({
     statusCode,
-    body: JSON.stringify(error)
+    body: error
   });
 }
