@@ -23,8 +23,6 @@ function apiHandler(event, context, callback) {
 
   switch (method) {
     case 'GET': {
-      console.info('get request');
-
       if (path === '/invitees/user') {
         // userid生成
         const id = crypt.createId();
@@ -39,8 +37,6 @@ function apiHandler(event, context, callback) {
       }
     }
     case 'PUT': {
-      console.info('post request');
-
       if (path.startsWith('/invitees')) {
         if (!body || !body.userId) {
           // ない場合はエラー
@@ -49,12 +45,10 @@ function apiHandler(event, context, callback) {
             status: 400
           };
         }
-        console.info('decrypt uid');
         // uidを復号する
         const decryptUID = crypt.decryptToId(body.userId);
 
         // データ登録
-        console.info('dynamo put');
         dynamo
           .put(decryptUID, body)
           .then(result => {

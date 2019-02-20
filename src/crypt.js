@@ -15,7 +15,6 @@ module.exports = {
       const derypt = Crypto.AES.decrypt(text, KEY);
       return derypt.toString(Crypto.enc.Utf8);
     } catch (error) {
-      console.info(`decrypt : ${error.toString()}`);
       throw {
         message: error.message,
         status: 400
