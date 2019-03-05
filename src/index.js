@@ -57,7 +57,11 @@ function apiHandler(event, context, callback) {
           })
           .catch(error => {
             console.warn(`dynamo put error ${decryptUID} : ${error.message}`);
-            errorDone(error.message || error.stack || 'unknown put error.', error.status || 500, callback);
+            errorDone(
+              error.message || error.stack || 'unknown put error.',
+              error.status || 500,
+              callback
+            );
           });
         return;
       }
@@ -79,8 +83,10 @@ function done(response, statusCode, callback) {
 }
 // エラー
 function errorDone(error, statusCode, callback) {
-  callback({
-    statusCode,
-    body: error
-  });
+  callback(
+    JSON.stringify({
+      status: statusCode,
+      message: error
+    })
+  );
 }

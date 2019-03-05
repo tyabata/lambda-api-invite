@@ -18,7 +18,7 @@ module.exports = {
       email,
       relation,
       useImage: Boolean(useImage),
-      request,
+      request: request || 'なし',
       update: new Date().toISOString()
     };
 
