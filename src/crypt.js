@@ -1,7 +1,7 @@
 const Crypto = require('crypto-js');
 const uuidv1 = require('uuid/v1');
 
-const KEY = 'geenum3Aijoh6iaShieyaeMaimeuya';
+const KEY = 'かぎ';
 
 // uuid,
 
