@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "aws-sdk": "^2.387.0",
+    "aws-sdk": "^2.814.0",
     "crypto-js": "^3.1.9-1",
     "uuid": "^3.3.2"
   },
